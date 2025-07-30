@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Chrome } from "lucide-react";
+import Link from "next/link";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -26,12 +27,21 @@ export default function Dashboard() {
             alt="User avatar"
           />
           <h1 className="text-center text-xl">{session.user?.name}</h1>
-          <Button
-            onClick={() => signOut()}
-            className="w-full h-12 text-base font-medium bg-red-500 hover:bg-red-600 text-white border border-red-800 shadow-sm"
-          >
-            Sign out
-          </Button>
+          
+          <div className="space-y-2">
+            <Link href="/vendors">
+              <Button className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 text-white border border-blue-800 shadow-sm">
+                Manage Vendors
+              </Button>
+            </Link>
+            
+            <Button
+              onClick={() => signOut()}
+              className="w-full h-12 text-base font-medium bg-red-500 hover:bg-red-600 text-white border border-red-800 shadow-sm"
+            >
+              Sign out
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );
