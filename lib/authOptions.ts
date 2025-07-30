@@ -1,9 +1,20 @@
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      name?: string | null
+      email?: string | null
+      image?: string | null
+    }
+  }
+}
+
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "./mongodb-adapter";
 
-export const authOption : NextAuthOptions = {
+export const authOption: NextAuthOptions = {
     adapter: MongoDBAdapter(clientPromise),
     providers: [
         GoogleProvider({
@@ -17,7 +28,7 @@ export const authOption : NextAuthOptions = {
     },
     callbacks: {
         session: async ({ session, token }) => {
-            if (session?.user) {
+            if (session?.user && token.sub) {
                 session.user.id = token.sub;
             }
             return session;

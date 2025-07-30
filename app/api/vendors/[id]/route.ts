@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOption } from '@/lib/authOptions';
 
 // GET single vendor
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOption);
     
@@ -13,10 +13,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
+    const { id } = await params;
+    
     await connectDB();
     
     const vendor = await Vendor.findOne({ 
-      _id: params.id,
+      _id: id,
       createdBy: session.user.email 
     });
     
@@ -32,7 +34,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // PUT update vendor
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOption);
     
@@ -40,12 +42,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
+    const { id } = await params;
     const body = await req.json();
     
     await connectDB();
     
     const vendor = await Vendor.findOneAndUpdate(
-      { _id: params.id, createdBy: session.user.email },
+      { _id: id, createdBy: session.user.email },
       body,
       { new: true, runValidators: true }
     );
@@ -62,7 +65,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE vendor
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOption);
     
@@ -70,10 +73,12 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
+    const { id } = await params;
+    
     await connectDB();
     
     const vendor = await Vendor.findOneAndDelete({ 
-      _id: params.id,
+      _id: id,
       createdBy: session.user.email 
     });
     

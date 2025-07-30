@@ -6,10 +6,19 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');
 }
 
-let cached = global.mongoose;
+// Extend the global namespace to include mongoose
+declare global {
+  var mongoose: {
+    conn: mongoose.Mongoose | null;
+    promise: Promise<mongoose.Mongoose> | null;
+  };
+}
+
+// Use globalThis instead of global for better compatibility
+let cached = globalThis.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = globalThis.mongoose = { conn: null, promise: null };
 }
 
 async function connectDB() {
@@ -21,11 +30,12 @@ async function connectDB() {
     const opts = {
       bufferCommands: false,
     };
-
+    
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return mongoose;
     });
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }

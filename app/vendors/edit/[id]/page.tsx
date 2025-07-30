@@ -2,13 +2,13 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, use } from 'react';
 import VendorForm from '@/app/components/VendorForm';
-
-export default function EditVendorPage({ params }: { params: { id: string } }) {
+// { params: { id: string } } -> { params: Promise<{ id: string }> }
+export default function EditVendorPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { id } = params;
+  const { id } = use(params);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -21,7 +21,7 @@ export default function EditVendorPage({ params }: { params: { id: string } }) {
   }
 
   if (!session) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (

@@ -20,7 +20,7 @@ export default function CreateVendorPage() {
   }
 
   if (!session) {
-    return null; // Will redirect in useEffect
+    return null; 
   }
 
   return (
