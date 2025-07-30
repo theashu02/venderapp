@@ -25,7 +25,7 @@ export default function EditVendorPage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <div className="container mx-auto p-4 flex justify-center">
+    <div className="flex mx-auto p-12 h-screen justify-center bg-gray-50">
       <VendorForm vendorId={id} />
     </div>
   );

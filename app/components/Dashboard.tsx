@@ -28,7 +28,7 @@ export default function Dashboard() {
           />
           <h1 className="text-center text-xl">{session.user?.name}</h1>
           
-          <div className="space-y-2">
+          <div className="flex flex-col gap-5">
             <Link href="/vendors">
               <Button className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 text-white border border-blue-800 shadow-sm">
                 Manage Vendors
